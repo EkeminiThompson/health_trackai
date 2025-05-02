@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy-manager
+    restart: always
+    environment:
+      DB_SQLITE_FILE: /data/database.sqlite  # Use SQLite for database storage
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt  # Used for SSL certificates
+    ports:
+      - "81:81"  # Admin panel on port 81 (you can change this if needed)
+      - "80:80"  # HTTP traffic
+      - "443:443"  # HTTPS traffic
+    networks:
+      - nginx-proxy-manager-network
+
+networks:
+  nginx-proxy-manager-network:
+    driver: bridge
